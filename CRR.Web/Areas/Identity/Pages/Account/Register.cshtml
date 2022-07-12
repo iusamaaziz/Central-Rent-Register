@@ -1,0 +1,51 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container my-3 d-flex justify-content-center">
+    <div class="card p-3">
+        <div class="class-title text-center">
+            <h4>Create a new account</h4>
+        </div>
+        <hr>
+        <div class="card-body">
+            <p>Please fill the following information to register your new account..</p>
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger m-2"></div>
+            <div class="form-floating m-2">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.Email"></label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating m-2">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true"/>
+                <label asp-for="Input.Password"></label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating m-2">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                <label asp-for="Input.ConfirmPassword"></label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-check m-2">
+              <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" required>
+              <label class="form-check-label" for="invalidCheck3">
+                Agree to terms and conditions
+              </label>
+              <div class="invalid-feedback">
+                You must agree before submitting.
+              </div>
+            </div>
+            <div class="d-grid">
+                <button id="registerSubmit" type="submit" class="btn btn-block btn-primary m-2">Register</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

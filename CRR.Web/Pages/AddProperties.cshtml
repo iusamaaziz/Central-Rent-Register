@@ -1,0 +1,103 @@
+﻿@page
+@model CRR.Web.Pages.AddPropertiesModel
+@{
+}
+
+<div class="container my-3">
+	<div class="row">
+		<div class="col-10">
+			<h4>Your properties</h4>
+		</div>
+		<div class="col-2 d-flex justify-content-end">
+			<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addProperty">Add new property</button>
+		</div>
+	</div>
+	
+	<div class="card my-3">
+		<div class="card-body">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Address</th>
+						<th>City</th>
+						<th>State</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Room</td>
+						<td>House#125</td>
+						<td>London</td>
+						<td>London</td>
+					</tr>
+					<tr>
+						<td>Commercial</td>
+						<td>Plot#1</td>
+						<td>Liverpool</td>
+						<td>England</td>
+					</tr>
+					<tr>
+						<td>House</td>
+						<td>House#1425</td>
+						<td>Small Heath</td>
+						<td>Bermingham</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="modal fade py-3" role="dialog" tabindex="-1" id="addProperty" area-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="addPropertyTitle">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+			<div class="modal-content rounded-3 shadow">
+				<div class="modal-header border-bottom-0">
+					<h5 class="modal-title" id="addPropertyTitle">Add property</h5>
+					<button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body p-5 pt-1">
+				    <form class="">
+					  <div>
+					    <label for="validationServer04" class="form-label">Property Type</label>
+					    <select class="form-select" id="validationServer04" required>
+							<option selected disabled value="">Choose...</option>
+					      <option>Room</option>
+					      <option>House</option>
+					      <option>Appartment</option>
+					      <option>Commercial</option>
+					    </select>
+					    <div class="invalid-feedback">
+					      Please select a property type.
+					    </div>
+					  </div>
+					  <div class="my-1">
+					    <label for="validationServer03" class="form-label">Address</label>
+					    <input type="text" class="form-control" required>
+					    <div class="invalid-feedback">
+					      Please provide a valid Address.
+					    </div>
+					  </div>
+						<div class="my-1">
+					    <label for="validationServer03" class="form-label">City</label>
+					    <input type="text" class="form-control" id="validationServer03" required>
+					    <div class="invalid-feedback">
+					      Please provide a valid city.
+					    </div>
+					  </div>
+					  <div class="my-1">
+					    <label for="validationServer05" class="form-label">Zip</label>
+					    <input type="text" class="form-control is-invalid" id="validationServer05" required>
+					    <div class="invalid-feedback">
+					      Please provide a valid zip.
+					    </div>
+					  </div>
+					  <div class="modal-footer my-2">
+					    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					    <button type="button" class="btn btn-primary">Save</button>
+					  </div>
+				    </form>
+				  </div>
+			</div>
+		</div>
+	</div>
+</div>
