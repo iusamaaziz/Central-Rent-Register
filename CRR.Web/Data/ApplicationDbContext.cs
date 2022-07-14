@@ -12,11 +12,17 @@ namespace CRR.Web.Data
 		{
 		}
 
-		public DbSet<Landlord> Landlords { get; set; }
-		public DbSet<Tenant> Tenants { get; set; }
+		//public DbSet<Landlord> Landlords { get; set; }
+		//public DbSet<Tenant> Tenants { get; set; }
 		public DbSet<Property> Properties { get; set; }
 		public DbSet<TenantReview> TenantReviews { get; set; }
 		public DbSet<Rating> Ratings { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+
+			base.OnModelCreating(builder);
+		}
 
 	}
 }

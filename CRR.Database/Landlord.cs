@@ -6,18 +6,10 @@ using System.Threading.Tasks;
 
 namespace CRR.Models
 {
-	public class Landlord : ApplicationUser
+	public class Landlord
 	{
-		public Landlord()
-		{
-			PermanentAddress = string.Empty;
-			About = string.Empty;
-			Properties = new List<Property>();
-		}
-
-		public string About { get; set; }
+		public string Id { get; set; }
 		public string PermanentAddress { get; set; }
-
-		public List<Property> Properties { get; set; }
+		public string About { get; set; }
 	}
 }

@@ -11,6 +11,11 @@
         <li class="nav-item">
             <a  class="nav-link px-2 text-secondary" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Welcome @User.Identity?.Name!</a>
         </li>
+        @if(User.IsInRole("landlord")){
+            <li class="nav-item">
+            <a class="nav-link px-2 text-secondary" asp-area="" asp-page="./AddProperties">Properties</a>
+            </li>
+        }
         <li class="nav-item">
             <a class="nav-link px-2 text-primary" asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a>
         </li>

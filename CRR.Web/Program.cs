@@ -1,4 +1,5 @@
 using CRR.Models;
+using CRR.Web.Controllers;
 using CRR.Web.Data;
 
 using Microsoft.AspNetCore.Identity;
@@ -10,12 +11,19 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 
 // Add services to the container.
+builder.Services.AddControllers();
+
+builder.Services.AddScoped<HttpAgent>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+	.AddRoles<IdentityRole>()
 	.AddEntityFrameworkStores<ApplicationDbContext>();
+
+//builder.Services.AddSingleton<PropertiesController>();
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
@@ -42,5 +50,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers();
 
 app.Run();

@@ -4,6 +4,7 @@ using CRR.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRR.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220712104621_landlord_tenant_update")]
+    partial class landlord_tenant_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,10 +28,6 @@ namespace CRR.Web.Data.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("About")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -62,10 +60,6 @@ namespace CRR.Web.Data.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PermanentAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -95,6 +89,30 @@ namespace CRR.Web.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("CRR.Models.Landlord", b =>
+                {
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("About")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApplicationUserId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PermanentAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ApplicationUserId");
+
+                    b.HasIndex("ApplicationUserId1");
+
+                    b.ToTable("Landlords");
+                });
+
             modelBuilder.Entity("CRR.Models.Property", b =>
                 {
                     b.Property<int>("Id")
@@ -107,29 +125,12 @@ namespace CRR.Web.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
+                    b.Property<string>("LandlordApplicationUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("LandlordApplicationUserId");
 
                     b.ToTable("Properties");
                 });
@@ -159,6 +160,22 @@ namespace CRR.Web.Data.Migrations
                     b.ToTable("Ratings");
                 });
 
+            modelBuilder.Entity("CRR.Models.Tenant", b =>
+                {
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ApplicationUserId");
+
+                    b.HasIndex("ApplicationUserId1");
+
+                    b.ToTable("Tenants");
+                });
+
             modelBuilder.Entity("CRR.Models.TenantReview", b =>
                 {
                     b.Property<int>("Id")
@@ -167,19 +184,19 @@ namespace CRR.Web.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("LandlordId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("LandlordId");
 
                     b.HasIndex("PropertyId");
 
@@ -323,15 +340,22 @@ namespace CRR.Web.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CRR.Models.Property", b =>
+            modelBuilder.Entity("CRR.Models.Landlord", b =>
                 {
                     b.HasOne("CRR.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Properties")
-                        .HasForeignKey("ApplicationUserId")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("CRR.Models.Property", b =>
+                {
+                    b.HasOne("CRR.Models.Landlord", null)
+                        .WithMany("Properties")
+                        .HasForeignKey("LandlordApplicationUserId");
                 });
 
             modelBuilder.Entity("CRR.Models.Rating", b =>
@@ -345,11 +369,22 @@ namespace CRR.Web.Data.Migrations
                     b.Navigation("TenantReview");
                 });
 
-            modelBuilder.Entity("CRR.Models.TenantReview", b =>
+            modelBuilder.Entity("CRR.Models.Tenant", b =>
                 {
                     b.HasOne("CRR.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("TenantReviews")
-                        .HasForeignKey("ApplicationUserId")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("CRR.Models.TenantReview", b =>
+                {
+                    b.HasOne("CRR.Models.Landlord", "Landlord")
+                        .WithMany()
+                        .HasForeignKey("LandlordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -359,7 +394,7 @@ namespace CRR.Web.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("Landlord");
 
                     b.Navigation("Property");
                 });
@@ -415,11 +450,9 @@ namespace CRR.Web.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CRR.Models.ApplicationUser", b =>
+            modelBuilder.Entity("CRR.Models.Landlord", b =>
                 {
                     b.Navigation("Properties");
-
-                    b.Navigation("TenantReviews");
                 });
 
             modelBuilder.Entity("CRR.Models.TenantReview", b =>

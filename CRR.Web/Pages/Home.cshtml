@@ -5,14 +5,16 @@
 
 <div class="container mt-2">
         
-    <div class="h-100 p-5 bg-light border rounded-3 mb-2">
+    @if (!User.IsInRole("landlord"))
+    {
+        <div class="h-100 p-5 bg-light border rounded-3 mb-2">
         <h4 class="h-5">Become a contributor!</h4>
         <p>If you ever happened to interact with tenents that damaged your appartments or houses after taking them on rent, please
             upload their details here so that other people can get benefit from it and keep such tenents away from their
             properties. Upload your tenent details <a class="btn btn-sm btn-outline-secondary" asp-page="/becomeContributor">here.</a>
         </p>
-
-    </div>
+        </div>
+    }
 
 
     <div class="card my-2">

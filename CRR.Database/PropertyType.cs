@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace CRR.Models
 {
-	public class Tenant : ApplicationUser
+	public enum PropertyType
 	{
-		
+		Residential,
+		Commercial
 	}
 }
