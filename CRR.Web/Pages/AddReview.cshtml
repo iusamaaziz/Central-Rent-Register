@@ -1,0 +1,121 @@
+﻿@page
+@model CRR.Web.Pages.AddReviewModel
+@{
+	ViewData["Title"] = "Review Tenant";
+}
+
+<div class="container my-3">
+	
+	<div class="shadow p-3">
+		<h4>Review Tenant</h4>
+		<div class="row">
+			<div class="col-lg-10">
+				<p class="text-muted"><small>Please provide the following information and necessary details related to your tenants to proceed.</small></p>
+			</div>
+			<div class="col-lg-2">
+				<a class="btn btn-outline-primary btn-sm" href="#"><small>My Contributions</small></a>
+			</div>
+		</div>
+		<hr/>
+	</div>
+
+	<div class="card mt-3 p-3">
+		<div class="card-body">
+			<form method="post">
+				<h5>Details</h5>
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="my-1">
+							<label asp-for="ReviewModel.PropertyId" class="form-label">Property</label>
+							<select asp-for="ReviewModel.PropertyId" class="form-select">
+								@foreach (var prop in Model.Properties)
+								{
+									<option value="@prop.Id">
+										<p class="text-primary"><strong>@prop.Address,</strong></p>
+										<div class="row">
+											<div class="col-sm-4">
+												<p class="text-secondary"><small>@prop.City,</small></p>
+											</div>
+											<div class="col-sm-4">
+												<p class="text-secondary"><small>@prop.State,</small></p>
+											</div>
+											<div class="col-sm-4">
+												<p class="text-secondary"><small>@prop.Country</small></p>
+											</div>
+											<div class="col-4">
+												<p class="text-info"><small>(@prop.Type)</small></p>
+											</div>
+										</div>
+									</option>
+								}
+							</select>
+							<span asp-validation-for="ReviewModel.PropertyId" class="invalid-feedback">
+								  Please select a property.
+							</span>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="my-1">
+							<label asp-for="ReviewModel.StayDuration" class="form-label">Stay Duration</label>
+							<input asp-for="ReviewModel.StayDuration" class="form-control" type="text" />
+							<span asp-validation-for="ReviewModel.StayDuration" class="invalid-feedback">
+								  Please enter a valid stay duration
+							</span>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="my-1">
+							<label asp-for="ReviewModel.TenantName" class="form-label">Tenant Name</label>
+							<input asp-for="ReviewModel.TenantName" class="form-control" type="text" />
+							<span asp-validation-for="ReviewModel.TenantName" class="invalid-feedback">
+								  Please enter a valid tenant name
+							</span>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="my-1">
+							<label asp-for="ReviewModel.TenantCNIC" class="form-label">Tenant CNIC</label>
+							<input asp-for="ReviewModel.TenantCNIC" class="form-control" type="text" />
+							<span asp-validation-for="ReviewModel.TenantCNIC" class="invalid-feedback">
+								  Please enter valid tenant CNIC
+							</span>
+						</div>
+					</div>
+					<div class="my-1">
+						<label asp-for="ReviewModel.Details" for="aboutInput" class="form-label">Details</label>
+						<textarea asp-for="ReviewModel.Details" class="form-control"  id="aboutInput" aria-describedby="aboutHelp"></textarea>
+						<div id="aboutHelp" class="form-text">Tell us additional details about the tenant. For example: What went right or what challenges you faced</div>
+						<span asp-validation-for="ReviewModel.Details" class="text-danger"></span>
+					</div>
+					<hr class="mt-1"/>
+					<h5>Ratings</h5>
+					<div class="card border-1 p-3">
+						@foreach (var item in Model.Ratings)
+						{
+							<div class="mt-1 d-flex justify-content-between align-items-center">
+                                <h5 class="review-stat">@item.Description</h5>
+								<div class="ratings">
+									<a role="button" onclick="console.log('@item.Description star-1')"><i class="fa fa-star"></i></a>
+									<a role="button" onclick="console.log('@item.Description star-2')"><i class="fa fa-star"></i></a>
+									<a role="button" onclick="console.log('@item.Description star-3')"><i class="fa fa-star"></i></a>
+									<a role="button" onclick="console.log('@item.Description star-4')"><i class="fa fa-star"></i></a>
+									<a role="button" onclick="console.log('@item.Description star-5')"><i class="fa fa-star"></i></a>
+								</div>
+							</div>
+						}
+					</div>
+					<h5 class="mt-2">Attachments</h5>
+					<input asp-for="ReviewModel.Attachment" class="btn-light my-2"/>
+					<hr />
+
+					<input type="submit" class="btn btn-primary btn-sm" value="Submit"/>
+				</div>
+			</form>
+		</div>
+	</div>
+		
+
+	<hr/>
+	<a class="page-link" asp-page="./home">&larr; Back to homepage</a>
+</div>

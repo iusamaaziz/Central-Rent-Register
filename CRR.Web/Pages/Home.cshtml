@@ -1,6 +1,7 @@
 ﻿@page
 @model CRR.Web.Pages.HomeModel
 @{
+    ViewData["Title"] = "Home";
 }
 
 <div class="container mt-2">
@@ -15,9 +16,24 @@
         </p>
         </div>
     }
+    else
+    {
+        <div class="card my-2 p-2 shadow border-0">
+            <div class="card-body">
+                <div class="row">
+                        <h5>Welcome to Central Rent Register!</h5>
+                    <div class="col-md-10">
+                        <small class="text-muted">Add your tenant reviews or search for tenants reviewed by other landlords or house owners.</small>
+                    </div>
+                    <div class="col-md-2 d-flex justify-content-end">
+                        <a class="btn btn-sm btn-secondary" asp-page="./AddReview">Review your Tenants</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
-
-    <div class="card my-2">
+    <div class="card my-2 shadow-sm">
         <div class="card-body">
             <h5>Search Tenents</h5>
             <small class="text-muted">Search by tenent CNIC, first names, last names or phone numbers to get property owner's reviews...</small>
@@ -28,263 +44,29 @@
 
     <h5>Search Results</h5>
 
-    <div class="modal fade py-3" role="dialog" tabindex="-1" id="viewDetails" aria-hidden="true" aria-labelledby="viewDetailsTitle">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content rounded-3 shadow">
-                <div class="modal-header border-bottom-0">
-                    <h5 class="modal-title" id="viewDetailsTitle">Jon Doe</h5>
-					<button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body p-5 pt-1">
-                    <hr/>
-                    <h6>Overview</h6>
-                    <div class="height-100 container d-flex justify-content-center align-items-center">
-                        <div class="card border-0 p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="ratings">
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <h5 class="review-count">4.0 stars</h5>
-                            </div>
-                            
-                            
-                            <div class="mt-5 d-flex justify-content-between align-items-center">
-                                <h5 class="review-stat">Cleanliness</h5>
-                                <div class="small-ratings">
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                
-                            </div>
-                            
-                            <div class="mt-1 d-flex justify-content-between align-items-center">
-                                <h5 class="review-stat">On-time Payments</h5>
-                                <div class="small-ratings">
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                            </div>
-                            
-                            
-                            <div class="mt-1 d-flex justify-content-between align-items-center">
-                                <h5 class="review-stat">Behavior</h5>
-                                <div class="small-ratings">
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                            </div>
-                            
-                            
-                            <div class="mt-1 d-flex justify-content-between align-items-center">
-                                <h5 class="review-stat">Recommendation</h5>
-                                <div class="small-ratings">
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr/>
-                    <h6>Details</h6>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt omnis aspernatur quam velit, voluptatem maiores doloremque accusantium officiis libero quasi at aperiam ipsum optio consequatur exercitationem pariatur animi deleniti, rerum amet labore? Atque, error suscipit aut culpa labore veritatis cum odit earum harum omnis ullam rerum dolore mollitia, optio neque deleniti ut at excepturi non! Aliquam soluta pariatur nemo eaque.
-                    </p>
-                    
-                    <hr/>
-                    <h6>Attachments</h6>
-
-                    <div class="row">
-                        <div class="col-4">
-                            <button class="btn btn-sm btn-outline-secondary">Contract.pdf</button>
-                        </div>
-                        <div class="col-4">
-                            <button class="btn btn-sm btn-outline-secondary">Damage.pdf</button>
-                        </div>
-                        <div class="col-4">
-                            <button class="btn btn-sm btn-outline-secondary">Misc.pdf</button>
-                        </div>
-                    </div>
-
-                    <hr/>
-                    <div class="card">
-                        <div class="card-header">
-                          Uploader
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Gerard</h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam, aliquid exercitationem placeat itaque alias accusantium nobis ipsam officiis soluta explicabo omnis, eum vitae.
-                            </p>
-                            <div class="d-flex justify-content-end">
-                                <a href="#" class="btn btn-outline-primary btn-sm">View Profile</a>
-                            </div>
-                        </div>
-                        <div class="card-footer d-flex justify-content-end text-muted">
-                          <small>Posted 4 months ago</small>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-
     @*First row of results*@
-    <div class="row">
-        <div class="col-6">
-            <div class="card p-3 my-2">
-                    <div class="card-title">
-                        <strong>Jon Doe</strong>
-                    </div>
-                    <div class="card-subtitle">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <small class="text-muted">Recently lived at 26th avenue, Small Heath, Bermingham</small>
-                            </div>
-                            <div class="d-flex justify-content-end col-md-3">
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewDetails"><small><i>View Details</i></small></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="height-100 container d-flex justify-content-center align-items-center">
-                            <div class="card border-0 p-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="ratings">
-                                        <i class="fa fa-star rating-color"></i>
-                                        <i class="fa fa-star rating-color"></i>
-                                        <i class="fa fa-star rating-color"></i>
-                                        <i class="fa fa-star rating-color"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <h5 class="review-count">4.0</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
-        <div class="col-6">
-            <div class="card p-3 my-2">
-                <div class="card-title">
-                    <strong>Jane Doe</strong>
-                </div>
-                <div class="card-subtitle">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <small class="text-muted">Recently lived at 6th street, Uptown, Los Angeles</small>
-                        </div>
-                        <div class="d-flex justify-content-end col-md-3">
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewDetails"><small><i>View Details</i></small></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="height-100 container d-flex justify-content-center align-items-center">
-                        <div class="card border-0 p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="ratings">
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <h5 class="review-count">2.0</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    @if(Model.Reviews.Count() == 0)
+    {
+        <div class="alert alert-info" role="alert">
+		    We could not find any tenants with related search attributes.
+		</div>
+    }
+    else
+    {
+        <div class="row">
+        @foreach (var review in Model.Reviews)
+        {
+            <div class="col-md-6">
+                <component type="typeof(TenantReviewOverview)" param-review="review" render-mode="Static" />
             </div>
+        }
         </div>
-    </div>
+    }
 
-    
     @*Second row of results*@
-    <div class="row">
-        <div class="col-6">
-            <div class="card p-3 my-2">
-                    <div class="card-title">
-                        <strong>Kelvin Doegno</strong>
-                    </div>
-                    <div class="card-subtitle">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <small class="text-muted">Recently lived at 26th avenue, Small Heath, Bermingham</small>
-                            </div>
-                            <div class="d-flex justify-content-end col-md-3">
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewDetails"><small><i>View Details</i></small></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="height-100 container d-flex justify-content-center align-items-center">
-                            <div class="card border-0 p-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="ratings">
-                                        <i class="fa fa-star rating-color"></i>
-                                        <i class="fa fa-star rating-color"></i>
-                                        <i class="fa fa-star rating-color"></i>
-                                        <i class="fa fa-star rating-color"></i>
-                                        <i class="fa fa-star rating-color"></i>
-                                    </div>
-                                    <h5 class="review-count">5.0</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
-        <div class="col-6">
-            <div class="card p-3 my-2">
-                <div class="card-title">
-                    <strong>Jonice Albert</strong>
-                </div>
-                <div class="card-subtitle">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <small class="text-muted">Recently lived at 6th street, Uptown, Los Angeles</small>
-                        </div>
-                        <div class="d-flex justify-content-end col-md-3">
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewDetails"><small><i>View Details</i></small></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="height-100 container d-flex justify-content-center align-items-center">
-                        <div class="card border-0 p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="ratings">
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star rating-color"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                </div>
-                                <h5 class="review-count">3.0</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @*<div class="row">
+        
+    </div>*@
 
     <div class="d-flex justify-content-center">
         <p class="lead text-danger">***End of Results***</p>

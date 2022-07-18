@@ -14,8 +14,10 @@ namespace CRR.Models
 		}
 
 		public int Id { get; set; }
+		public string TenantName { get; set; }
+		public string Details { get; set; }
 		public DateTime Date { get; set; }
-		public double RatingOverview => Ratings.Average(r => r.Value);
+		public double RatingOverview => Math.Round(Ratings.Average(r => r.Value), 0, MidpointRounding.ToPositiveInfinity);
 		
 		public string ApplicationUserId { get; set; }
 		public int PropertyId { get; set; }

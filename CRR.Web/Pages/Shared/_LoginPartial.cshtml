@@ -13,15 +13,17 @@
         </li>
         @if(User.IsInRole("landlord")){
             <li class="nav-item">
-            <a class="nav-link px-2 text-secondary" asp-area="" asp-page="./AddProperties">Properties</a>
+            <a class="nav-link px-2 text-secondary" asp-area="" asp-page="./AddProperties"><i class="fa fa-bookmark"></i> Properties</a>
             </li>
         }
         <li class="nav-item">
-            <a class="nav-link px-2 text-primary" asp-area="Identity" asp-page="/Account/Manage/Index">Settings</a>
+            <a class="nav-link text-primary" asp-area="Identity" asp-page="/Account/Manage/Index">
+                <i class="fa fa-cogs"></i> Settings
+            </a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post" >
-                <button  type="submit" class="nav-link btn btn-link px-2 text-danger">Logout</button>
+                <button type="submit" class="nav-link btn btn-link px-2 text-danger"><i class="fa fa-arrow-circle-up"></i> Logout</button>
             </form>
         </li>
     </ul>

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRR.Web", "CRR.Web\CRR.Web.csproj", "{62026F10-3E2A-42A7-AFF5-7B40F7C8492B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRR.Models", "CRR.Database\CRR.Models.csproj", "{43651529-E340-4DA9-94C2-BD404182977B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRR.Models", "CRR.Database\CRR.Models.csproj", "{43651529-E340-4DA9-94C2-BD404182977B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
