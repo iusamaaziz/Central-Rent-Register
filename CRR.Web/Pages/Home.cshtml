@@ -57,7 +57,7 @@
         @foreach (var review in Model.Reviews)
         {
             <div class="col-md-6">
-                <component type="typeof(TenantReviewOverview)" param-review="review" render-mode="Static" />
+                <component type="typeof(TenantReviewOverview)" param-review="review" render-mode="ServerPrerendered" />
             </div>
         }
         </div>

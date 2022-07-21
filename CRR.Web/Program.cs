@@ -20,13 +20,13 @@ builder.Services.AddScoped(sp => new HttpClient
 	BaseAddress = new Uri("https://localhost:7222/api/")
 });
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//	options.UseSqlServer(connectionString));
-//builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+	options.UseSqlServer(connectionString));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//	.AddRoles<IdentityRole>()
-//	.AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+	.AddRoles<IdentityRole>()
+	.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.Configure<FormOptions>(x =>
 {
