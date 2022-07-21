@@ -1,5 +1,4 @@
 using CRR.Models;
-using CRR.Web.Controllers;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +9,11 @@ namespace CRR.Web.Pages
 	[Authorize]
     public class HomeModel : PageModel
     {
-        private HttpAgent _agent;
+        private HttpClient _client;
 
-		public HomeModel(HttpAgent agent)
+		public HomeModel(HttpClient agent)
 		{
-            _agent = agent;
+            _client = agent;
     //        Reviews = new List<TenantReview>
     //        {
     //            new TenantReview
@@ -68,7 +67,7 @@ namespace CRR.Web.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var res = await _agent.HttpClient.GetAsync("reviews");
+            var res = await _client.GetAsync("reviews");
 
             return Page();
         }

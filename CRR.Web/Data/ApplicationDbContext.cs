@@ -20,7 +20,6 @@ namespace CRR.Web.Data
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
-
 			//builder.Entity<TenantReview>(e =>
 			//{
 			//	e.Ignore(r => r.RatingOverview);

@@ -94,27 +94,25 @@ namespace CRR.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/Index");
 
             if (ModelState.IsValid)
             {
 				
-				var response = await _client.PostAsJsonAsync("/api/Account/Login", new LoginParameters{ Email = Input.Email, Password = Input.Password, RememberMe = Input.RememberMe });
+				var response = await _client.PostAsJsonAsync("Account/Login", new LoginParameters{ Email = Input.Email, Password = Input.Password, RememberMe = Input.RememberMe });
 
-				Microsoft.AspNetCore.Identity.SignInResult result = await response.Content.ReadFromJsonAsync<Microsoft.AspNetCore.Identity.SignInResult>();
-
-				if (result.Succeeded)
+				if (response.IsSuccessStatusCode)
                 {
-                    return LocalRedirect(returnUrl);
+                    return RedirectToPage(returnUrl);
                 }
-                if (result.IsLockedOut)
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
-                    return RedirectToPage("./Lockout");
+                    string reason = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, reason);
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
+                    ModelState.AddModelError(string.Empty, "Failed to login.");
                 }
             }
 

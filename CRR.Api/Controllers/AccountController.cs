@@ -20,14 +20,14 @@ namespace CRR.Api.Controllers
 		public AccountController(
 			UserManager<ApplicationUser> userManager,
 			IUserStore<ApplicationUser> userStore,
-			SignInManager<ApplicationUser> signInManager,
-			IUserEmailStore<ApplicationUser> emailStore
+			//IUserEmailStore<ApplicationUser> emailStore,
+			SignInManager<ApplicationUser> signInManager
 			)
 		{
 			_signInManager = signInManager;
 			_userManager = userManager;
 			_userStore = userStore;
-			_emailStore = GetEmailStore();
+			//_emailStore = emailStore;
 		}
 
 		[HttpPost("login")]
@@ -43,19 +43,21 @@ namespace CRR.Api.Controllers
 
 			var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
-			return Ok(result);
+			if (result.Succeeded)
+				return Ok();
+			else return BadRequest("Invalid login attempt");
 		}
 
         [HttpPost("register")]
 		public async Task<IActionResult> Register([FromBody] RegisterParameters model)
         {
 			var user = CreateUser();
-			
+			user.Email = model.Email;
 			await _userStore.SetUserNameAsync(user, model.Email, CancellationToken.None);
-			await _emailStore.SetEmailAsync(user, model.Email, CancellationToken.None);
 			var result = await _userManager.CreateAsync(user, model.Password);
-
-			return Ok(result);
+			if (result.Succeeded)
+				return Ok(result);
+			else return BadRequest(result.Errors.Select(s => s.Description));
 		}
 
 		private ApplicationUser CreateUser()
