@@ -1,15 +1,14 @@
 ﻿using CRR.Models;
-using CRR.Web.Data;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace CRR.Web.Controllers
+namespace CRR.Api.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class PropertiesController
+	public class PropertiesController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
 
@@ -25,7 +24,7 @@ namespace CRR.Web.Controllers
 		}
 
 		[HttpPost("upsert")]
-		public async Task<HttpResponseMessage> UpsertAsync([FromBody] Property property)
+		public async Task<IActionResult> UpsertAsync([FromBody] Property property)
 		{
 			var prop = await _context.Properties.FirstOrDefaultAsync(p => p.Id == property.Id);
 
@@ -47,7 +46,7 @@ namespace CRR.Web.Controllers
 
 			await _context.SaveChangesAsync();
 
-			return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+			return Ok();
 		}
 	}
 }

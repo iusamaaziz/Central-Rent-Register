@@ -11,13 +11,14 @@ namespace CRR.Models
 		public Rating()
 		{
 			Description = string.Empty;
+			Value = 1;
 		}
 
 		public int Id { get; set; }
 		public string Description { get; set; }
 		public int Value { get; set; }
-		public int TenantReviewId { get; set; }
+		public int? TenantReviewId { get; set; }
 
-		public TenantReview TenantReview { get; set; }
+		public TenantReview? TenantReview { get; set; }
 	}
 }

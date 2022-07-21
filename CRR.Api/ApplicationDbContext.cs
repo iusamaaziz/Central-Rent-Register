@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace CRR.Web.Data
+namespace CRR.Api
 {
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{

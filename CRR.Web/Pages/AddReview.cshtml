@@ -1,4 +1,5 @@
 ﻿@page
+@using CRR.Models
 @model CRR.Web.Pages.AddReviewModel
 @{
 	ViewData["Title"] = "Review Tenant";
@@ -21,7 +22,7 @@
 
 	<div class="card mt-3 p-3">
 		<div class="card-body">
-			<form method="post">
+			<form method="post" enctype="multipart/form-data">
 				<h5>Details</h5>
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 				<div class="row">
@@ -50,8 +51,7 @@
 									</option>
 								}
 							</select>
-							<span asp-validation-for="ReviewModel.PropertyId" class="invalid-feedback">
-								  Please select a property.
+							<span asp-validation-for="ReviewModel.PropertyId" class="text-danger">
 							</span>
 						</div>
 					</div>
@@ -59,8 +59,7 @@
 						<div class="my-1">
 							<label asp-for="ReviewModel.StayDuration" class="form-label">Stay Duration</label>
 							<input asp-for="ReviewModel.StayDuration" class="form-control" type="text" />
-							<span asp-validation-for="ReviewModel.StayDuration" class="invalid-feedback">
-								  Please enter a valid stay duration
+							<span asp-validation-for="ReviewModel.StayDuration" class="text-danger">
 							</span>
 						</div>
 					</div>
@@ -68,8 +67,7 @@
 						<div class="my-1">
 							<label asp-for="ReviewModel.TenantName" class="form-label">Tenant Name</label>
 							<input asp-for="ReviewModel.TenantName" class="form-control" type="text" />
-							<span asp-validation-for="ReviewModel.TenantName" class="invalid-feedback">
-								  Please enter a valid tenant name
+							<span asp-validation-for="ReviewModel.TenantName" class="text-danger">
 							</span>
 						</div>
 					</div>
@@ -77,8 +75,7 @@
 						<div class="my-1">
 							<label asp-for="ReviewModel.TenantCNIC" class="form-label">Tenant CNIC</label>
 							<input asp-for="ReviewModel.TenantCNIC" class="form-control" type="text" />
-							<span asp-validation-for="ReviewModel.TenantCNIC" class="invalid-feedback">
-								  Please enter valid tenant CNIC
+							<span asp-validation-for="ReviewModel.TenantCNIC" class="text-danger">
 							</span>
 						</div>
 					</div>
@@ -93,23 +90,18 @@
 					<div class="card border-1 p-3">
 						@foreach (var item in Model.Ratings)
 						{
-							<div class="mt-1 d-flex justify-content-between align-items-center">
-                                <h5 class="review-stat">@item.Description</h5>
-								<div class="ratings">
-									<a role="button" onclick="console.log('@item.Description star-1')"><i class="fa fa-star"></i></a>
-									<a role="button" onclick="console.log('@item.Description star-2')"><i class="fa fa-star"></i></a>
-									<a role="button" onclick="console.log('@item.Description star-3')"><i class="fa fa-star"></i></a>
-									<a role="button" onclick="console.log('@item.Description star-4')"><i class="fa fa-star"></i></a>
-									<a role="button" onclick="console.log('@item.Description star-5')"><i class="fa fa-star"></i></a>
-								</div>
-							</div>
+							<component type="typeof(RatingItemComponent)" param-rating="item" render-mode="Static"/>
 						}
 					</div>
-					<h5 class="mt-2">Attachments</h5>
-					<input asp-for="ReviewModel.Attachment" class="btn-light my-2"/>
-					<hr />
 
-					<input type="submit" class="btn btn-primary btn-sm" value="Submit"/>
+					<hr />
+					<h5>Attachments</h5>
+					<div class="form-control mt-1">
+						<input type="file" asp-for="ReviewModel.Attachments" />
+						<div class="form-text">Please choose files having size smaller than 5mb.</div>
+					</div>
+
+					<input asp-page-handler="Upload" type="submit" class="btn btn-primary btn-sm" value="Submit"/>
 				</div>
 			</form>
 		</div>
@@ -119,3 +111,7 @@
 	<hr/>
 	<a class="page-link" asp-page="./home">&larr; Back to homepage</a>
 </div>
+
+<script>
+	function 
+</script>

@@ -1,5 +1,4 @@
 using CRR.Models;
-using CRR.Web.Controllers;
 using CRR.Web.Models;
 
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +12,10 @@ namespace CRR.Web.Pages
 	[Authorize(Roles = "landlord")]
 	public class AddPropertiesModel : PageModel
     {
-        private readonly HttpAgent _agent;
-        public AddPropertiesModel(HttpAgent agent)
+        private readonly HttpClient _client;
+        public AddPropertiesModel(HttpClient client)
         {
-            _agent = agent;
+            _client = client;
         }
 
         public async Task<IActionResult> OnGet()
@@ -24,7 +23,7 @@ namespace CRR.Web.Pages
 			ClaimsPrincipal currentUser = this.User;
 			currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-			Properties = await _agent.HttpClient.GetFromJsonAsync<Property[]>($"Properties/{currentUserId}");
+			Properties = await _client.GetFromJsonAsync<Property[]>($"Properties/{currentUserId}");
 			
 			PropertyModel = new();
 			
@@ -59,7 +58,7 @@ namespace CRR.Web.Pages
 				Type = PropertyModel.Type
 			};
 
-			var response = await _agent.HttpClient.PostAsJsonAsync("Properties/upsert", prop);
+			var response = await _client.PostAsJsonAsync("Properties/upsert", prop);
 			if (response.IsSuccessStatusCode)
 				return RedirectToPage("./AddProperties");
 

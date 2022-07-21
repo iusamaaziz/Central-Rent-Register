@@ -19,7 +19,8 @@ namespace CRR.Web.Models
 		[MinLength(1)]
 		public string Details { get; set; }
 
-		public IFormFile Attachment { get; set; }
+		//[FileExtensions(Extensions = "jpg,png,jpeg")]
+		public IFormFileCollection Attachments { get; set; }
 
 	}
 }

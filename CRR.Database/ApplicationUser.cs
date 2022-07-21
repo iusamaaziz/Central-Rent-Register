@@ -14,8 +14,8 @@ namespace CRR.Models
 		{
 			//Properties = new List<Property>();
 			TenantReviews = new List<TenantReview>();
-			About = String.Empty;
-			PermanentAddress = String.Empty;
+			About = string.Empty;
+			PermanentAddress = string.Empty;
 		}
 
 		public string About { get; set; }

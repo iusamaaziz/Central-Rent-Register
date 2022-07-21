@@ -4,6 +4,7 @@ using CRR.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRR.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220720073414_rev_update")]
+    partial class rev_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,6 +106,7 @@ namespace CRR.Web.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<byte[]>("Content")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<int?>("TenantReviewId")
@@ -125,21 +128,27 @@ namespace CRR.Web.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -161,7 +170,7 @@ namespace CRR.Web.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TenantReviewId")
+                    b.Property<int>("TenantReviewId")
                         .HasColumnType("int");
 
                     b.Property<int>("Value")
@@ -356,18 +365,18 @@ namespace CRR.Web.Data.Migrations
 
             modelBuilder.Entity("CRR.Models.Attachment", b =>
                 {
-                    b.HasOne("CRR.Models.TenantReview", "TenantReview")
+                    b.HasOne("CRR.Models.TenantReview", null)
                         .WithMany("Attachments")
                         .HasForeignKey("TenantReviewId");
-
-                    b.Navigation("TenantReview");
                 });
 
             modelBuilder.Entity("CRR.Models.Property", b =>
                 {
                     b.HasOne("CRR.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });
@@ -376,7 +385,9 @@ namespace CRR.Web.Data.Migrations
                 {
                     b.HasOne("CRR.Models.TenantReview", "TenantReview")
                         .WithMany("Ratings")
-                        .HasForeignKey("TenantReviewId");
+                        .HasForeignKey("TenantReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("TenantReview");
                 });

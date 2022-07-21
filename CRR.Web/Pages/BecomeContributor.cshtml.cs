@@ -1,5 +1,4 @@
 using CRR.Models;
-using CRR.Web.Controllers;
 using CRR.Web.Data;
 using CRR.Web.Models;
 
@@ -14,10 +13,10 @@ namespace CRR.Web.Pages
 {
     public class BecomeContributorModel : PageModel
     {
-        private readonly HttpAgent _http;
-		public BecomeContributorModel(HttpAgent http)
+        private readonly HttpClient _client;
+		public BecomeContributorModel(HttpClient http)
 		{
-			_http = http;
+			_client = http;
 		}
 
 		[BindProperty]
@@ -41,11 +40,11 @@ namespace CRR.Web.Pages
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
 
-            var response = await _http.HttpClient.PostAsJsonAsync("users/addto/landlord", new Landlord { Id = currentUserID, About = Landlord.About, PermanentAddress = Landlord.PermanentAdress });
+            var response = await _client.PostAsJsonAsync("users/addto/landlord", new Landlord { Id = currentUserID, About = Landlord.About, PermanentAddress = Landlord.PermanentAdress });
 
 			if(response.IsSuccessStatusCode)
 			    return RedirectToPage("./AddProperties");
-
+			
             return Page();
         }
     }

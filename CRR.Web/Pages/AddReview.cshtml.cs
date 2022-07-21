@@ -1,11 +1,12 @@
 using CRR.Models;
-using CRR.Web.Controllers;
 using CRR.Web.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
+using System.IO.Compression;
 using System.Security.Claims;
 
 namespace CRR.Web.Pages
@@ -13,10 +14,10 @@ namespace CRR.Web.Pages
 	[Authorize(Roles = "landlord")]
     public class AddReviewModel : PageModel
     {
-        private readonly HttpAgent _agent;
-        public AddReviewModel(HttpAgent agent)
+        private readonly HttpClient _client;
+        public AddReviewModel(HttpClient agent)
         {
-            _agent = agent;
+            _client = agent;
         }
         public async Task OnGet()
         {
@@ -69,7 +70,61 @@ namespace CRR.Web.Pages
             ClaimsPrincipal currentUser = this.User;
             string? currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            return await _agent.HttpClient.GetFromJsonAsync<Property[]>($"Properties/{currentUserId}");
+            return await _client.GetFromJsonAsync<Property[]>($"Properties/{currentUserId}");
+        }
+
+        public async Task<IActionResult> OnPostUploadAsync()
+        {
+			if (!ModelState.IsValid)
+			{
+                return Page();
+			}
+
+            ClaimsPrincipal currentUser = this.User;
+            string? currentUserId = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var review = new TenantReview
+            {
+                ApplicationUserId = currentUserId,
+				TenantCNIC = ReviewModel.TenantCNIC,
+				TenantName = ReviewModel.TenantName,
+				Date = DateTime.Now,
+				StayDuration = ReviewModel.StayDuration,
+				Details = ReviewModel.Details,
+				PropertyId = ReviewModel.PropertyId
+            };
+			
+			foreach (var item in ReviewModel.Attachments)
+			{
+				using (var memoryStream = new MemoryStream())
+				{
+					// Upload the file if less than 5 MB
+					if (memoryStream.Length < 5242880)
+					{
+						var file = new Attachment()
+						{
+							Content = memoryStream.ToArray()
+						};
+
+                        review.Attachments.Add(file);
+					}
+				}
+			}
+			
+            review.Ratings.AddRange(Ratings);
+
+            var res = await _client.PostAsJsonAsync("reviews/add", review);
+			if (res.IsSuccessStatusCode)
+			{
+                review = await res.Content.ReadFromJsonAsync<TenantReview>();
+			}
+			else
+			{
+                ModelState.AddModelError("File", await res.Content.ReadAsStringAsync());
+			}
+
+
+			return Page();
         }
     }
 }
