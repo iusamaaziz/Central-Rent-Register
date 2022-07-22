@@ -18,21 +18,51 @@ namespace CRR.Web.Controllers
 			_context = context;
 		}
 
+		[HttpGet("search/{search}")]
+		public async Task<IActionResult> Get([FromRoute] string search)
+		{
+			var revs = await _context.TenantReviews
+				.Include(r => r.ApplicationUser)
+				.Include(r => r.Property)
+				.Include(r => r.Attachments)
+				.Include(r => r.Ratings)
+				.Where(r => r.TenantName.Contains(search)
+				|| r.TenantCNIC.Contains(search)
+				|| r.Property.City.StartsWith(search)
+				|| r.Property.Address.StartsWith(search)
+				|| r.Property.State.StartsWith(search)
+				|| r.Property.Country.StartsWith(search)
+				)
+				.ToArrayAsync();
+
+			return Ok(revs);
+		}
+
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
 			var revs = await _context.TenantReviews
-				//.Include(r => r.ApplicationUser)
+				.Include(r => r.ApplicationUser)
 				.Include(r => r.Property)
+				.Include(r => r.Attachments)
+				.Include(r => r.Ratings)
 				.ToArrayAsync();
-			//return Ok(await _context.TenantReviews
-			//.Include(r => r.ApplicationUser)
-			//.Include(r => r.Property)
-			//.Include(r => r.Ratings)
-			//.Include(r => r.Attachments)
-			//.ToListAsync());
 
 			return Ok(revs);
+		}
+
+		[HttpGet("{id}")]
+		public async Task<IActionResult> Get([FromRoute] int id)
+		{
+			var review = await _context.TenantReviews
+				.Include(r => r.ApplicationUser)
+				.Include(r => r.Property)
+				.Include(r => r.Attachments)
+				.Include(r => r.Ratings)
+				.FirstAsync(r => r.Id == id);
+
+			if (review == null) return NotFound();
+			return Ok(review);
 		}
 
 		[HttpPost("add")]

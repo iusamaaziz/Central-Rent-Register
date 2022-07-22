@@ -20,9 +20,9 @@ namespace CRR.Models
 		public string StayDuration { get; set; }
 		public string Details { get; set; }
 		public DateTime Date { get; set; }
-		//public double RatingOverview => Ratings.Count > 0 ? Math.Round(Ratings.Average(r => r.Value), 0, MidpointRounding.ToPositiveInfinity) : 0;
-		
-		public string ApplicationUserId { get; set; }
+        public double RatingOverview { get; set; }
+
+        public string ApplicationUserId { get; set; }
 		public int PropertyId { get; set; }
 
 		public ApplicationUser? ApplicationUser { get; set; }

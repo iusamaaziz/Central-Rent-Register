@@ -1,19 +1,20 @@
 ﻿@using CRR.Models
+@inject HttpClient _client;
+@using System.IO
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
 
-@{
-    double average = Review.Ratings.Count > 0 ? Math.Round(Review.Ratings.Average(r => r.Value), 0, MidpointRounding.ToPositiveInfinity) : 0;
-}
 <div class="card p-3 my-1 shadow-sm">
     <div class="card-title">
-        <strong>@Review.TenantName</strong>
+        <strong>@Review?.TenantName</strong>
     </div>
     <div class="card-subtitle">
         <div class="row">
             <div class="col-md-9">
-                <small class="text-muted">@Review.Property.Address, @Review.Property.City, @Review.Property.State, @Review.Property.Country</small>
+                <small class="text-muted"><i class="fa fa-building"></i> @Review?.Property?.Address, @Review?.Property?.City, @Review?.Property?.State, @Review?.Property?.Country</small>
             </div>
             <div class="d-flex justify-content-end col-md-3">
-                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#r_@Review.Id"><small><i>View Details</i></small></button>
+                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#r_@Review?.Id"><small><i class="fa fa-eye"></i> <i> View Details</i></small></button>
             </div>
         </div>
     </div>
@@ -24,8 +25,7 @@
                         <div class="ratings">
                         @for (int i = 1; i < 6; i++)
                         {
-                            double avg = Review.Ratings.Count > 0 ? Math.Round(Review.Ratings.Average(r => r.Value), 0, MidpointRounding.ToPositiveInfinity) : 0;
-                            if(i <= avg)
+                            if(i <= Review?.RatingOverview)
                             {
                                 <i class="fa fa-star rating-color"></i>
                             }
@@ -35,31 +35,31 @@
                             }
                         }
                     </div>
-                        <h5 class="review-count">@average stars</h5>
+                        <h5 class="review-count">@Review?.RatingOverview stars</h5>
                     </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade py-3" role="dialog" tabindex="-1" id="r_@Review.Id" aria-hidden="true" aria-labelledby="@Review.TenantName">
+<div class="modal fade py-3" role="dialog" tabindex="-1" id="r_@Review?.Id" aria-hidden="true" aria-labelledby="@Review?.TenantName">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content rounded-3 shadow">
                 <div class="modal-header border-bottom-0">
-                    <h5 class="modal-title" id="@Review.TenantName">@Review.TenantName</h5>
+                    <h5 class="modal-title" id="@Review?.TenantName">@Review?.TenantName</h5>
 					<button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body p-5 pt-1">
                     <hr/>
-                    <h6>Overview</h6>
+                    <h6><i class="fa fa-star"></i> Overview</h6>
                     <div class="height-100 container d-flex justify-content-center align-items-center">
                         <div class="card border-0 p-3">
                             <div class="d-flex mb-4 justify-content-between align-items-center">
                                 <div class="ratings">
                                 @for (int i = 1; i < 6; i++)
                                 {
-                                    if(i <= average)
+                                    if(i <= Review?.RatingOverview)
                                     {
                                         <i class="fa fa-star rating-color"></i>
                                     }
@@ -69,7 +69,7 @@
                                     }
                                 }
                             </div>
-                                <h5 class="review-count">@average stars</h5>
+                                <h5 class="review-count">@Review?.RatingOverview stars</h5>
                             </div>
                             
                         @foreach (var rating in Review.Ratings)
@@ -95,25 +95,46 @@
                         </div>
                     </div>
                     <hr/>
-                    <h6>Details</h6>
+                    <h6><i class="fa fa-file-text"></i> Details</h6>
                     <p>
                         @Review.Details
                     </p>
+
+                    <hr/>
+                    <h6><i class="fa fa-calendar-o"></i> Stay Duration</h6>
+                    <p>
+                        @Review.StayDuration
+                    </p>
+
+                    <hr/>
+                    <h6><i class="fa fa-building"></i> Location</h6>
+                    <p>
+                        @Review?.Property?.Address, @Review?.Property?.City, @Review?.Property?.State, @Review?.Property?.Country
+                    </p>
+
+                    <hr/>
+                    <h6><i class="fa fa-address-book"></i> CNIC</h6>
+                    <p>
+                        @Review.TenantCNIC
+                    </p>
+
                     
                     <hr/>
-                    <h6>Attachments</h6>
+                    <h6><i class="fa fa-link"></i> Attachments</h6>
 
-                    <div class="row">
-                        <div class="col-4">
-                            <button class="btn btn-sm btn-outline-secondary">Contract.pdf</button>
-                        </div>
-                        <div class="col-4">
-                            <button class="btn btn-sm btn-outline-secondary">Damage.pdf</button>
-                        </div>
-                        <div class="col-4">
-                            <button class="btn btn-sm btn-outline-secondary">Misc.pdf</button>
-                        </div>
-                    </div>
+                    @if(Review.Attachments.Count == 0)
+                    {
+                        <div class="alert alert-info" role="alert">
+		                    No attachments provided.
+		                </div>
+                    }
+                    else
+                    {
+                    @foreach (var item in Review.Attachments)
+                    {
+                        <button type="submit" class="btn btn-sm btn-outline-secondary my-1"><i class="fa fa-download"></i> @item.Name</button>
+                    }
+                }
 
                     <hr/>
                     <div class="card">
@@ -121,16 +142,16 @@
                           About Reviewer
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Gerard</h5>
+                            <h5 class="card-title">@Review?.ApplicationUser?.UserName</h5>
                             <p class="card-text">
-                                Hello this is gerard
+                                @Review?.ApplicationUser?.About
                             </p>
                             <div class="d-flex justify-content-end">
                                 <a href="#" class="btn btn-outline-primary btn-sm">View Profile</a>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-end text-muted">
-                          <small>Posted on @Review.Date.ToShortDateString()</small>
+                          <small>Posted on @Review?.Date.ToShortDateString()</small>
                         </div>
                     </div>
                 </div>
@@ -138,8 +159,35 @@
         </div>
     </div>
 
+
 @code {
     [Parameter]
-    public TenantReview Review { get; set; }
+    public TenantReview? Review { get; set; }
 
+
+}
+
+@functions{
+    
+    private async Task GetDetailsAsync(){
+        var response = await _client.GetFromJsonAsync<TenantReview>($"reviews/{Review?.Id}");
+        Review = response;
+    }
+
+    private Stream GetFileStream(byte[] data)
+    {
+        var fileStream = new MemoryStream(data);
+
+        return fileStream;
+    }
+
+    private async Task DownloadFileFromStream(Attachment? attachment)
+    {
+        var fileStream = GetFileStream(attachment.Content);
+        var fileName = attachment.Name;
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
 }

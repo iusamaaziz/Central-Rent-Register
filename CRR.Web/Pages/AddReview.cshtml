@@ -5,8 +5,18 @@
 	ViewData["Title"] = "Review Tenant";
 }
 
+
+
 <div class="container my-3">
 	
+	@if(TempData["Notification"] != null)
+	{
+		<div class="alert alert-info alert-dismissible fade show" role="alert">
+	    @TempData["Notification"]
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	}
+
 	<div class="shadow p-3">
 		<h4>Review Tenant</h4>
 		<div class="row">

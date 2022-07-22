@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRR.Web", "CRR.Web\CRR.Web.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRR.Models", "CRR.Database\CRR.Models.csproj", "{43651529-E340-4DA9-94C2-BD404182977B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRR.Api", "CRR.Api\CRR.Api.csproj", "{18D3C745-877E-476E-B75F-0934E5C8ABF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRR.Api", "CRR.Api\CRR.Api.csproj", "{18D3C745-877E-476E-B75F-0934E5C8ABF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -12,16 +12,11 @@ namespace CRR.Models
 	{
 		public ApplicationUser()
 		{
-			//Properties = new List<Property>();
-			TenantReviews = new List<TenantReview>();
 			About = string.Empty;
 			PermanentAddress = string.Empty;
 		}
 
 		public string About { get; set; }
 		public string PermanentAddress { get; set; }
-
-		//public List<Property> Properties { get; set; }
-		public List<TenantReview> TenantReviews { get; set; }
 	}
 }

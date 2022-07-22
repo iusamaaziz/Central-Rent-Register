@@ -3,6 +3,7 @@ using CRR.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CRR.Web.Pages
 {
@@ -16,14 +17,27 @@ namespace CRR.Web.Pages
             _client = agent;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task OnGetAsync()
         {
-            Reviews = await _client.GetFromJsonAsync<List<TenantReview>>("reviews");
+            //Reviews = await _client.GetFromJsonAsync<List<TenantReview>>("reviews");
 
-            return Page();
+			if (!string.IsNullOrEmpty(SearchString))
+			{
+                Reviews = await _client.GetFromJsonAsync<List<TenantReview>>($"reviews/search/{SearchString}");
+            }
+			else
+			{
+                Reviews = new List<TenantReview>();
+			}
+			
+            //return Page();
         }
 
-		[BindProperty]
-		public List<TenantReview> Reviews { get; set; }
+        public IList<TenantReview>? Reviews { get; set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public string SearchString { get; set; }
+
+        //[BindProperty]
+		//public List<TenantReview> Reviews { get; set; }
 	}
 }

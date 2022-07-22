@@ -18,34 +18,36 @@ namespace CRR.Web.Pages
         public AddReviewModel(HttpClient agent)
         {
             _client = agent;
-        }
-        public async Task OnGet()
-        {
-            Properties = await GetPropertiesAsync();
 
             Ratings = new Rating[]
             {
                 new Rating
                 {
                     Description = "Cleanliness",
-                    Value = 0
+                    Value = 1
                 },
                 new Rating
                 {
                     Description = "Payments",
-                    Value = 0
+                    Value = 1
                 },
                 new Rating
                 {
                     Description = "Behavior",
-                    Value = 0
+                    Value = 1
                 },
                 new Rating
                 {
                     Description = "Recommendation",
-                    Value = 0
+                    Value = 1
                 },
             };
+			
+        }
+		
+        public async Task OnGet()
+        {
+            Properties = await GetPropertiesAsync();
 
             ReviewModel = new();
         }
@@ -91,8 +93,9 @@ namespace CRR.Web.Pages
 				Date = DateTime.Now,
 				StayDuration = ReviewModel.StayDuration,
 				Details = ReviewModel.Details,
-				PropertyId = ReviewModel.PropertyId
-            };
+				PropertyId = ReviewModel.PropertyId,
+                RatingOverview = Ratings.Count() > 0 ? Math.Round(Ratings.Average(r => r.Value), 0, MidpointRounding.ToPositiveInfinity) : 1
+        };
 			
 			foreach (var item in ReviewModel.Attachments)
 			{
@@ -103,6 +106,7 @@ namespace CRR.Web.Pages
 					{
 						var file = new Attachment()
 						{
+                            Name = item.FileName,
 							Content = memoryStream.ToArray()
 						};
 
@@ -110,13 +114,14 @@ namespace CRR.Web.Pages
 					}
 				}
 			}
-			
+
             review.Ratings.AddRange(Ratings);
 
             var res = await _client.PostAsJsonAsync("reviews/add", review);
 			if (res.IsSuccessStatusCode)
 			{
-                review = await res.Content.ReadFromJsonAsync<TenantReview>();
+                TempData["Notification"] = "Review was successfully published";
+                //review = await res.Content.ReadFromJsonAsync<TenantReview>();
 			}
 			else
 			{
