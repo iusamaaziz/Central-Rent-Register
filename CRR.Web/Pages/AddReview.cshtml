@@ -24,7 +24,7 @@
 				<p class="text-muted"><small>Please provide the following information and necessary details related to your tenants to proceed.</small></p>
 			</div>
 			<div class="col-lg-2">
-				<a class="btn btn-outline-primary btn-sm" href="#"><small>My Contributions</small></a>
+				@*<a class="btn btn-outline-primary btn-sm" href="#"><small>My Contributions</small></a>*@
 			</div>
 		</div>
 		<hr/>
@@ -99,10 +99,68 @@
 					<hr class="mt-1"/>
 					<h5>Ratings</h5>
 					<div class="card border-1 p-3">
-						@foreach (var item in Model.ReviewModel.Ratings)
+						@for(int i = 0; i < Model.ReviewModel.Ratings.Count(); i++)
 						{
-							<component type="typeof(RatingItemComponent)" param-rating="item" render-mode="Static"/>
+							<div class="mt-1 d-flex justify-content-between align-items-center">
+								<h5 class="review-stat">@Model.ReviewModel.Ratings[i].Description</h5>
+								<input type="hidden" asp-for="ReviewModel.Ratings[i].Description" value="@Model.ReviewModel.Ratings[i].Description"/>
+								<div class="ratings">
+									<select asp-for="ReviewModel.Ratings[i].Value" class="border-0 form-select-sm shadow-sm" style="font-family: 'FontAwesome'; color: #fbc634;">
+										<option value="0">
+											Select Rating
+										</option>
+										<option value="1">
+											&#xf005;
+										</option>
+										<option value="2">
+											&#xf005; &#xf005;
+										</option>
+										<option value="3">
+											&#xf005; &#xf005; &#xf005;
+										</option>
+										<option value="4">
+											&#xf005; &#xf005; &#xf005; &#xf005;
+										</option>
+										<option value="5">
+											&#xf005; &#xf005; &#xf005; &#xf005; &#xf005;
+										</option>
+									</select>
+									@*<a id="r1" name="r1" role="button" onclick="console.log('@item.Description star-1')"><i class="fa fa-star"></i></a>
+									<a role="button" onclick="console.log('@item.Description star-2')"><i class="fa fa-star"></i></a>
+									<a role="button" onclick="console.log('@item.Description star-3')"><i class="fa fa-star"></i></a>
+									<a role="button" onclick="console.log('@item.Description star-4')"><i class="fa fa-star"></i></a>
+									<a role="button" onclick="console.log('@item.Description star-5')"><i class="fa fa-star"></i></a>*@
+								</div>
+							</div>
 						}
+						@*@foreach (var item in Model.ReviewModel.Ratings)
+						{
+							<div class="mt-1 d-flex justify-content-between align-items-center">
+								<h5 class="review-stat">@item.Description</h5>
+								<div class="ratings">
+									<select asp-for="ReviewModel.Ratings[0].Value" class="border-0 form-select-sm shadow-sm" style="font-family: 'FontAwesome'; color: #fbc634;">
+										<option value="0">
+											Select Rating
+										</option>
+										<option value="1">
+											&#xf005;
+										</option>
+										<option value="2">
+											&#xf005; &#xf005;
+										</option>
+										<option value="3">
+											&#xf005; &#xf005; &#xf005;
+										</option>
+										<option value="4">
+											&#xf005; &#xf005; &#xf005; &#xf005;
+										</option>
+										<option value="5">
+											&#xf005; &#xf005; &#xf005; &#xf005; &#xf005;
+										</option>
+									</select>
+								</div>
+							</div>
+						}*@
 					</div>
 
 					<hr />
@@ -122,7 +180,3 @@
 	<hr/>
 	<a class="page-link" asp-page="./home">&larr; Back to homepage</a>
 </div>
-
-<script>
-	function 
-</script>

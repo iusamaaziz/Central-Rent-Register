@@ -62,7 +62,7 @@
     @if(Model.Reviews.Count() == 0)
     {
         <div class="alert alert-info" role="alert">
-		    We could not find any tenants with related search attributes.
+		    No matching tenants.
 		</div>
     }
     else
@@ -224,9 +224,9 @@
                                     <p class="card-text">
                                         @review?.ApplicationUser?.About
                                     </p>
-                                    <div class="d-flex justify-content-end">
+                                    @*<div class="d-flex justify-content-end">
                                         <a href="#" class="btn btn-outline-primary btn-sm">View Profile</a>
-                                    </div>
+                                    </div>*@
                                 </div>
                                 <div class="card-footer d-flex justify-content-end text-muted">
                                   <small>Posted on @review?.Date.ToShortDateString()</small>
@@ -238,6 +238,7 @@
             </div>
         }
         </div>
+        <div class="h-100"></div>
         <div class="d-flex justify-content-center">
             <p class="text-danger"><small>***End of Results***</small></p>
         </div>
@@ -247,33 +248,26 @@
     <!-- Insights -->
     <div class="card my-2">
         <div class="card-body">
-            <h6 class="card-title">Insights</h6>
+            <h6 class="card-title">Platform Insights</h6>
           <div class="row my-2">
-              <div class="col-3 text-light">
-                  <div class="card bg-success">
+              <div class="col-4 box-shadow">
+                  <div class="card">
                       <div class="card-body">
-                          <h6>1978 reports</h6>
+                          <h6><i class="fa fa-files-o"></i> @Model.Insight.Reviews reviews</h6>
                       </div>
                   </div>
               </div>
-              <div class="col-3 text-light">
-                  <div class="card bg-primary">
+              <div class="col-4 shadow-sm">
+                  <div class="card">
                       <div class="card-body">
-                          <h6>382 Owners</h6>
+                          <h6><i class="fa fa-users"></i> @Model.Insight.Users Users</h6>
                       </div>
                   </div>
               </div>
-              <div class="col-3 text-light">
-                  <div class="card bg-info">
+              <div class="col-4 shadow-sm">
+                  <div class="card">
                       <div class="card-body">
-                          <h6>71 Locations</h6>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-3 text-light">
-                  <div class="card bg-secondary">
-                      <div class="card-body">
-                          <h6>961 Users</h6>
+                          <h6><i class="fa fa-building"></i> @Model.Insight.Properties Properties</h6>
                       </div>
                   </div>
               </div>
@@ -281,18 +275,3 @@
         </div>
     </div>
 </div>
-
-<script>
-  window.downloadFileFromStream = async (fileName, contentStreamReference) => {
-    const arrayBuffer = await contentStreamReference.arrayBuffer();
-      console.log(fileName);
-    const blob = new Blob([arrayBuffer]);
-    const url = URL.createObjectURL(blob);
-    const anchorElement = document.createElement('a');
-    anchorElement.href = url;
-    anchorElement.download = fileName ?? '';
-    anchorElement.click();
-    anchorElement.remove();
-    URL.revokeObjectURL(url);
-  }
-</script>

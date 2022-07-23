@@ -13,10 +13,17 @@ namespace CRR.Web.Pages
 {
     public class BecomeContributorModel : PageModel
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+		
         private readonly HttpClient _client;
-		public BecomeContributorModel(HttpClient http)
+		public BecomeContributorModel(HttpClient http, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
 		{
 			_client = http;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
 		}
 
 		[BindProperty]
@@ -36,16 +43,30 @@ namespace CRR.Web.Pages
                 return Page();
             }
 
-            ClaimsPrincipal currentUser = this.User;
-            var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.GetUserAsync(User);
 
+            user.About = Landlord.About;
+            user.PermanentAddress = Landlord.PermanentAdress;
 
-            var response = await _client.PostAsJsonAsync("users/addto/landlord", new Landlord { Id = currentUserID, About = Landlord.About, PermanentAddress = Landlord.PermanentAdress });
+            var result = await _userManager.UpdateAsync(user);
 
-			if(response.IsSuccessStatusCode)
-			    return RedirectToPage("./AddProperties");
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return Page();
+            }
+
+            if (!await _roleManager.RoleExistsAsync("landlord"))
+                await _roleManager.CreateAsync(new IdentityRole("landlord"));
+
+            if(!await _userManager.IsInRoleAsync(user, "landlord"))
+                await _userManager.AddToRoleAsync(user, "landlord");
 			
-            return Page();
+            await _signInManager.RefreshSignInAsync(user);
+            return RedirectToPage("./AddProperties");
         }
     }
 }

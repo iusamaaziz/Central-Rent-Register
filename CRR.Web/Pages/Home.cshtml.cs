@@ -28,13 +28,16 @@ namespace CRR.Web.Pages
 			{
                 Reviews = new List<TenantReview>();
 			}
+			
+			Insight = await _client.GetFromJsonAsync<Insight>("insights");
         }
 
         public IList<TenantReview>? Reviews { get; set; } = default!;
         [BindProperty(SupportsGet = true)]
         public string Keyword { get; set; }
+		public Insight Insight { get; set; }
 
-        public async Task<IActionResult> OnPostDownloadAsync(int id)
+		public async Task<IActionResult> OnPostDownloadAsync(int id)
 		{
             var res = await _client.GetAsync($"attachments/{id}");
 			if (res.IsSuccessStatusCode)
@@ -50,5 +53,14 @@ namespace CRR.Web.Pages
 			
             return Page();
         }
+
     }
+	
+       public class Insight
+	{
+		public int Properties { get; set; }
+		public int Reviews { get; set; }
+		public int Users { get; set; }
+	}
+
 }
