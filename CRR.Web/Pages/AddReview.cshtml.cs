@@ -18,54 +18,19 @@ namespace CRR.Web.Pages
         public AddReviewModel(HttpClient agent)
         {
             _client = agent;
-
-            Ratings = new Rating[]
-            {
-                new Rating
-                {
-                    Description = "Cleanliness",
-                    Value = 1
-                },
-                new Rating
-                {
-                    Description = "Payments",
-                    Value = 1
-                },
-                new Rating
-                {
-                    Description = "Behavior",
-                    Value = 1
-                },
-                new Rating
-                {
-                    Description = "Recommendation",
-                    Value = 1
-                },
-            };
-			
         }
 		
         public async Task OnGet()
         {
             Properties = await GetPropertiesAsync();
-
             ReviewModel = new();
         }
 
-        [BindProperty]
-        public Property[] Properties { get; set; }
 		[BindProperty]
-		public Rating[] Ratings { get; set; }
+        public Property[] Properties { get; set; }
+
 		[BindProperty]
 		public TenantReviewModel ReviewModel { get; set; }
-
-		public async Task<PageResult> OnPostAsync()
-		{
-            if (!ModelState.IsValid)
-                return Page();
-
-            return Page();
-		}
 
 		private async Task<Property[]> GetPropertiesAsync()
 		{
@@ -77,6 +42,8 @@ namespace CRR.Web.Pages
 
         public async Task<IActionResult> OnPostUploadAsync()
         {
+			Properties = await GetPropertiesAsync();
+			
 			if (!ModelState.IsValid)
 			{
                 return Page();
@@ -94,8 +61,8 @@ namespace CRR.Web.Pages
 				StayDuration = ReviewModel.StayDuration,
 				Details = ReviewModel.Details,
 				PropertyId = ReviewModel.PropertyId,
-                RatingOverview = Ratings.Count() > 0 ? Math.Round(Ratings.Average(r => r.Value), 0, MidpointRounding.ToPositiveInfinity) : 1
-        };
+                RatingOverview = ReviewModel.Ratings.Count() > 0 ? Math.Round(ReviewModel.Ratings.Average(r => r.Value), 0, MidpointRounding.ToPositiveInfinity) : 1
+            };
 			
 			foreach (var item in ReviewModel.Attachments)
 			{
@@ -104,6 +71,7 @@ namespace CRR.Web.Pages
 					// Upload the file if less than 5 MB
 					if (memoryStream.Length < 5242880)
 					{
+                        await item.CopyToAsync(memoryStream);
 						var file = new Attachment()
 						{
                             Name = item.FileName,
@@ -115,7 +83,7 @@ namespace CRR.Web.Pages
 				}
 			}
 
-            review.Ratings.AddRange(Ratings);
+            review.Ratings.AddRange(ReviewModel.Ratings);
 
             var res = await _client.PostAsJsonAsync("reviews/add", review);
 			if (res.IsSuccessStatusCode)

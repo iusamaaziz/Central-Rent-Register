@@ -34,10 +34,11 @@
 		<div class="card-body">
 			<form method="post" enctype="multipart/form-data">
 				<h5>Details</h5>
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 				<div class="row">
 					<div class="col-md-6">
 						<div class="my-1">
+							<input type="hidden" asp-for="Properties" />
 							<label asp-for="ReviewModel.PropertyId" class="form-label">Property</label>
 							<select asp-for="ReviewModel.PropertyId" class="form-select">
 								@foreach (var prop in Model.Properties)
@@ -98,7 +99,7 @@
 					<hr class="mt-1"/>
 					<h5>Ratings</h5>
 					<div class="card border-1 p-3">
-						@foreach (var item in Model.Ratings)
+						@foreach (var item in Model.ReviewModel.Ratings)
 						{
 							<component type="typeof(RatingItemComponent)" param-rating="item" render-mode="Static"/>
 						}
@@ -106,8 +107,8 @@
 
 					<hr />
 					<h5>Attachments</h5>
-					<div class="form-control mt-1">
-						<input type="file" asp-for="ReviewModel.Attachments" />
+					<div class="form-control mt-1 mb-2">
+						<input type="file" asp-for="ReviewModel.Attachments" multiple/>
 						<div class="form-text">Please choose files having size smaller than 5mb.</div>
 					</div>
 

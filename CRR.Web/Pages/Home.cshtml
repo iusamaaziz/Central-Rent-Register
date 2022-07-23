@@ -44,7 +44,7 @@
             <form>
                 <div class="row">
                     <div class="col-md-11">
-                        <input class="form-control form-control-dark w-100 rounded-top mt-2 border-1" asp-for="SearchString" type="text" placeholder="Search.." aria-label="Search">
+                        <input class="form-control form-control-dark w-100 rounded-top mt-2 border-1" asp-for="Keyword" type="text" placeholder="Search.." aria-label="Search">
                     </div>
                     <div class="col-md-1">
                         <button type="submit" class="btn btn-outline-primary mt-2">
@@ -198,11 +198,21 @@
                             }
                             else
                             {
-                            @foreach (var item in review.Attachments)
-                            {
-                                <button type="submit" class="btn btn-sm btn-outline-secondary my-1"><i class="fa fa-download"></i> @item.Name</button>
+                                @foreach (var item in review.Attachments)
+                                {
+                                    <form asp-page-handler="Download" method="post" asp-route-id="@item.Id">
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary my-1"><i class="fa fa-download"></i> @item.Name</button>
+                                    </form>
+                                }
+
+                                @if(TempData["Notification"] != null)
+                                {
+                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+	                                    @TempData["Notification"]
+	                                	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	                                </div>
+                                }
                             }
-                        }
         
                             <hr/>
                             <div class="card">
@@ -271,27 +281,6 @@
         </div>
     </div>
 </div>
-
-@functions{
-
-
-    Stream GetFileStream(byte[] data)
-    {
-        var fileStream = new MemoryStream(data);
-
-        return fileStream;
-    }
-
-    async Task DownloadFileFromStream(Attachment? attachment)
-    {
-        var fileStream = GetFileStream(attachment.Content);
-        var fileName = attachment.Name;
-
-        using var streamRef = new DotNetStreamReference(stream: fileStream);
-
-        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
-    }
-}
 
 <script>
   window.downloadFileFromStream = async (fileName, contentStreamReference) => {

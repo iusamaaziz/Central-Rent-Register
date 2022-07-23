@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.JSInterop;
 
 namespace CRR.Web.Pages
 {
@@ -12,32 +13,42 @@ namespace CRR.Web.Pages
     {
         private HttpClient _client;
 
-		public HomeModel(HttpClient agent)
+        public HomeModel(HttpClient agent)
 		{
             _client = agent;
         }
 
         public async Task OnGetAsync()
         {
-            //Reviews = await _client.GetFromJsonAsync<List<TenantReview>>("reviews");
-
-			if (!string.IsNullOrEmpty(SearchString))
+			if (!string.IsNullOrEmpty(Keyword))
 			{
-                Reviews = await _client.GetFromJsonAsync<List<TenantReview>>($"reviews/search/{SearchString}");
+                Reviews = await _client.GetFromJsonAsync<List<TenantReview>>($"reviews/search/{Keyword}");
             }
 			else
 			{
                 Reviews = new List<TenantReview>();
 			}
-			
-            //return Page();
         }
 
         public IList<TenantReview>? Reviews { get; set; } = default!;
         [BindProperty(SupportsGet = true)]
-        public string SearchString { get; set; }
+        public string Keyword { get; set; }
 
-        //[BindProperty]
-		//public List<TenantReview> Reviews { get; set; }
-	}
+        public async Task<IActionResult> OnPostDownloadAsync(int id)
+		{
+            var res = await _client.GetAsync($"attachments/{id}");
+			if (res.IsSuccessStatusCode)
+			{
+				Attachment? attachment = await res.Content.ReadFromJsonAsync<Attachment>();
+				
+                return File(attachment.Content, "application/force-download", attachment?.Name);
+            }
+			else
+			{
+                TempData["Notification"] = "Failed to download attachment";
+			}
+			
+            return Page();
+        }
+    }
 }

@@ -29,5 +29,7 @@ namespace CRR.Api
 			base.OnModelCreating(builder);
 		}
 
+		public DbSet<CRR.Models.Attachment>? Attachment { get; set; }
+
 	}
 }
